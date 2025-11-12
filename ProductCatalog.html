@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог товаров | BoardGameHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="images/icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header styles */
+        header {
+            background-color: #ffffff;
+            padding: 0;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .offers {
+            background-color: #ffd700;
+            padding: 12px 0;
+            text-align: center;
+        }
+        
+        .offers p {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0;
+        }
+        
+        .offers span {
+            background-color: #1a1a1a;
+            color: #ffd700;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo span {
+            color: #ffd700;
+            margin-right: 5px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            position: relative;
+            padding: 5px 0;
+            transition: all 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #ffd700;
+            transition: width 0.3s;
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .icon-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .icon-links a {
+            color: #1a1a1a;
+            font-size: 20px;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .icon-links a:hover {
+            color: #ffd700;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ffd700;
+            color: #1a1a1a;
+            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Page header */
+        .page-header {
+            background-color: #f8f8f8;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .page-header h1 {
+            font-size: 36px;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+        
+        .breadcrumb li {
+            margin: 0 5px;
+            font-size: 14px;
+            color: #7a7a7a;
+        }
+        
+        .breadcrumb li a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+        
+        .breadcrumb li a:hover {
+            color: #ffd700;
+        }
+        
+        .breadcrumb li::after {
+            content: '/';
+            margin-left: 10px;
+            color: #7a7a7a;
+        }
+        
+        .breadcrumb li:last-child::after {
+            content: '';
+        }
+        
+        /* Catalog layout */
+        .catalog-layout {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 70px;
+        }
+        
+        /* Filters sidebar */
+        .filters {
+            width: 280px;
+            flex-shrink: 0;
+        }
+        
+        .filter-block {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .filter-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .filter-title button {
+            background: none;
+            border: none;
+            color: #7a7a7a;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        .filter-title button:hover {
+            color: #ffd700;
+        }
+        
+        .filter-list {
+            list-style: none;
+        }
+        
+        .filter-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-list input[type="checkbox"] {
+            margin-right: 10px;
+            accent-color: #ffd700;
+        }
+        
+        .filter-list label {
+            cursor: pointer;
+            color: #4a4a4a;
+        }
+        
+        .price-range {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .price-inputs input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            width: 100%; /* Добавляем это свойство */
+    min-width: 0; /* Важно для корректного сжатия */
+    box-sizing: border-box; /* Учитываем padding в ширине */
+        }
+        
+        .price-slider {
+            height: 5px;
+            background-color: #e0e0e0;
+            position: relative;
+            border-radius: 5px;
+            margin: 15px 0;
+            width: 100%;
+        }
+        
+        .price-slider .progress {
+            height: 5px;
+            background-color: #ffd700;
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-radius: 5px;
+        }
+        
+        .range-input {
+            position: relative;
+            width: 100%;
+        }
+        
+        .range-input input {
+            position: absolute;
+            top: -5px;
+            height: 5px;
+            width: 100%;
+            background: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            height: 17px;
+            width: 17px;
+            border-radius: 50%;
+            background: #ffd700;
+            pointer-events: auto;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .filter-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .apply-btn {
+            background-color: #ffd700;
+            color: #1a1a1a;
+        }
+        
+        .reset-btn {
+            background-color: #f0f0f0;
+            color: #4a4a4a;
+        }
+        
+        /* Products section */
+        .products-section {
+            flex: 1;
+        }
+        
+        .products-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .products-found {
+            font-size: 16px;
+            color: #7a7a7a;
+        }
+        
+        .sort-select {
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: #ffffff;
+            color: #4a4a4a;
+        }
+        
+        .view-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .view-options button {
+            background: none;
+            border: 1px solid #e0e0e0;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #7a7a7a;
+        }
+        
+        .view-options button.active {
+            background-color: #ffd700;
+            border-color: #ffd700;
+            color: #1a1a1a;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid #ffd700;
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-content h3 {
+            margin-bottom: 10px;
+            color: #1a1a1a;
+            font-size: 18px;
+        }
+        
+        .product-content p {
+            color: #7a7a7a;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .price span {
+            background-color: #ffd700;
+            color: #1a1a1a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .product-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+        
+        .pagination a, .pagination span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .pagination a {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .pagination a:hover, .pagination a.active {
+            background-color: #ffd700;
+            border-color: #ffd700;
+            color: #1a1a1a;
+        }
+        
+        .pagination span {
+            color: #7a7a7a;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            padding: 70px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 25px;
+            font-size: 18px;
+            color: #ffd700;
+        }
+        
+        .footer-section p {
+            color: #cccccc;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-section ul li a {
+            color: #cccccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section ul li a:hover {
+            color: #ffd700;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background-color: #ffd700;
+            color: #1a1a1a;
+            transform: translateY(-3px);
+        }
+        
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            color: #cccccc;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #333333;
+            color: #9a9a9a;
+            font-size: 14px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #ffd700;
+            color: #1a1a1a;
+            padding: 12px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background-color: #f0c900;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 992px) {
+            .catalog-layout {
+                flex-direction: column;
+            }
+            
+            .filters {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px 10px;
+            }
+            
+            .products-topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .view-options {
+                align-self: flex-end;
+            }
+        }
+        
+        .mobile-filters-btn {
+            display: none;
+            background-color: #ffd700;
+            color: #1a1a1a;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        @media (max-width: 576px) {
+            .mobile-filters-btn {
+                display: block;
+            }
+            
+            .filters {
+                display: none;
+            }
+            
+            .filters.active {
+                display: block;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with navigation and offers -->
+    <header>
+        <div class="offers">
+            <p>🚀 <span>СКИДКА 15%</span> на первую покупку при регистрации | 🎁 <span>БЕСПЛАТНАЯ ДОСТАВКА</span> от 3000 руб.</p>
+        </div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo"><span>♟️</span> BoardGameHub</div>
+                <nav>
+                    <ul>
+                        <li><a href="#" style="color: #ffd700;">Каталог товаров</a></li>
+                        <li><a href="Blog.html">Блог</a></li>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </nav>
+                <div class="icon-links">
+                    <a href="Bag.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">3</span>
+                    </a>
+                    <a href="#"><i class="fas fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Каталог товаров</h1>
+            <ul class="breadcrumb">
+                <li><a href="main.html">Главная</a></li>
+                <li>Каталог товаров</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Catalog section -->
+    <section class="container">
+        <button class="mobile-filters-btn" id="mobileFiltersBtn">
+            <i class="fas fa-filter"></i> Фильтры
+        </button>
+        
+        <div class="catalog-layout">
+            <!-- Filters sidebar -->
+            <div class="filters" id="filtersSidebar">
+                <div class="filter-block">
+                    <div class="filter-title">
+                        <span>Категории</span>
+                    </div>
+                    <ul class="filter-list">
+                        <li>
+                            <input type="checkbox" id="category-1" checked>
+                            <label for="category-1">Семейные игры</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="category-2">
+                            <label for="category-2">Стратегии</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="category-3">
+                            <label for="category-3">Детские игры</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="category-4">
+                            <label for="category-4">Кооперативные</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="category-5">
+                            <label for="category-5">Для вечеринок</label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="filter-block">
+                    <div class="filter-title">
+                        <span>Цена, руб.</span>
+                    </div>
+                    <div class="price-range">
+                        <div class="price-inputs">
+                            <input type="number" placeholder="От" value="500">
+                            <input type="number" placeholder="До" value="5000">
+                        </div>
+                        <div class="price-slider">
+                            <div class="progress"></div>
+                        </div>
+                        <div class="range-input">
+                            <input type="range" min="0" max="10000" value="500" class="min-range">
+                            <input type="range" min="0" max="10000" value="5000" class="max-range">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-block">
+                    <div class="filter-title">
+                        <span>Количество игроков</span>
+                    </div>
+                    <ul class="filter-list">
+                        <li>
+                            <input type="checkbox" id="players-1">
+                            <label for="players-1">1-2 игрока</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="players-2" checked>
+                            <label for="players-2">2-4 игрока</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="players-3">
+                            <label for="players-3">4-6 игроков</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="players-4">
+                            <label for="players-4">6+ игроков</label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="filter-block">
+                    <div class="filter-title">
+                        <span>Возраст</span>
+                    </div>
+                    <ul class="filter-list">
+                        <li>
+                            <input type="checkbox" id="age-1">
+                            <label for="age-1">3+</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="age-2" checked>
+                            <label for="age-2">6+</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="age-3" checked>
+                            <label for="age-3">12+</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="age-4">
+                            <label for="age-4">16+</label>
+                        </li>
+                        <li>
+                            <input type="checkbox" id="age-5">
+                            <label for="age-5">18+</label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="apply-btn">Применить</button>
+                    <button class="reset-btn">Сбросить</button>
+                </div>
+            </div>
+            
+            <!-- Products section -->
+            <div class="products-section">
+                <div class="products-topbar">
+                    <div class="products-found">Найдено 24 товара</div>
+                    <div class="sort-select-wrapper">
+                        <select class="sort-select">
+                            <option>По популярности</option>
+                            <option>По возрастанию цены</option>
+                            <option>По убыванию цены</option>
+                            <option>По новизне</option>
+                        </select>
+                    </div>
+                    <div class="view-options">
+                        <button class="active"><i class="fas fa-th"></i></button>
+                        <button><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+                
+                <script type="module" src="outputCollections.js"></script>
+                <div class="products-grid" id="productsGrid">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Загрузка товаров...</p>
+                    </div>
+                    <script type="module" src="outputCollections.js"></script>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <span>...</span>
+                    <a href="#">6</a>
+                    <a href="#"><i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>BoardGameHub</h3>
+                    <p>Лучший выбор настольных игр для всей семьи с доставкой по всей России. Присоединяйтесь к нашему сообществу!</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Каталог</h3>
+                    <ul>
+                        <li><a href="#">Семейные игры</a></li>
+                        <li><a href="#">Стратегии</a></li>
+                        <li><a href="#">Детские игры</a></li>
+                        <li><a href="#">Кооперативные игры</a></li>
+                        <li><a href="#">Для вечеринок</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Информация</h3>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Доставка и оплата</a></li>
+                        <li><a href="#">Контакты</a></li>
+                        <li><a href="#">Блог</a></li>
+                        <li><a href="#">Акции</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Игровая, 15</li>
+                        <li><i class="fas fa-phone"></i> +7 (495) 123-45-67</li>
+                        <li><i class="fas fa-envelope"></i> info@boardgamehub.ru</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 BoardGameHub. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        // Импорт необходимых модулей Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+
+        // Конфигурация Firebase для веб-приложения
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuYb4O0s7accu6T5MSbJ6WUiSpwnJI6gk",
+            authDomain: "gamestore-8a2a3.firebaseapp.com",
+            databaseURL: "https://gamestore-8a2a3-default-rtdb.firebaseio.com",
+            projectId: "gamestore-8a2a3",
+            storageBucket: "gamestore-8a2a3.firebasestorage.app",
+            messagingSenderId: "630285121213",
+            appId: "1:630285121213:web:6cc7f2cc0350e0f020e9d4",
+            measurementId: "G-3EXSGX4EWJ"
+        };
+
+        // Инициализация Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        async function loadProducts() {
+            try {
+                const productsRef = ref(db, 'Products');
+                const snapshot = await get(productsRef);
+                const productsGrid = document.getElementById('productsGrid');
+                
+                // Очищаем только если элемент существует
+                if (productsGrid) {
+                    productsGrid.innerHTML = '';
+                } else {
+                    console.error("Products grid element not found");
+                    return;
+                }
+
+                if (snapshot.exists()) {
+                    const products = snapshot.val();
+                    
+                    const productsArray = Object.entries(products)
+                        .sort(([id1], [id2]) => id1 - id2)
+                        .map(([id, product]) => ({ id, ...product }));
+
+                    // Обновляем счетчик товаров
+                    const productsFound = document.querySelector('.products-found');
+                    if (productsFound) {
+                        productsFound.textContent = `Найдено ${productsArray.length} товаров`;
+                    }
+
+                    for (const product of productsArray) {
+                        await createProductCard(product, productsGrid);
+                    }
+                } else {
+                    productsGrid.innerHTML = '<div class="loading"><p>Товары не найдены</p></div>';
+                    console.log("No products available");
+                }
+            } catch (error) {
+                console.error("Error loading products:", error);
+                const productsGrid = document.getElementById('productsGrid');
+                if (productsGrid) {
+                    productsGrid.innerHTML = '<div class="loading"><p>Ошибка загрузки товаров</p></div>';
+                }
+            }
+        }
+
+        async function createProductCard(product, container) {
+            try {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // Используем URL изображения из базы данных или заглушку
+                const imageUrl = product.Image ? `images/${product.Image}` : 'images/placeholder.jpg';
+
+                productCard.innerHTML = `
+                    <img src="${imageUrl}" 
+                         alt="${product.Name || 'Product'}" 
+                         class="product-image">
+                    <div class="product-content">
+                        <h3>${product.Name || 'Без названия'}</h3>
+                        <p>${product.Description || 'Описание отсутствует'}</p>
+                        <div class="price">
+                            ${product.Price || '0'} ₽
+                            ${product.Discount ? `<span>-${product.Discount}%</span>` : ''}
+                        </div>
+                        <a href="#" class="btn">В корзину</a>
+                    </div>
+                `;
+
+                container.appendChild(productCard);
+            } catch (error) {
+                console.error("Error creating product card:", error);
+            }
+        }
+
+        // Загружаем продукты при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts().catch(error => {
+                console.error("Initial load error:", error);
+            });
+        });
+
+        // Mobile filters toggle
+        document.getElementById('mobileFiltersBtn').addEventListener('click', function() {
+            const filters = document.getElementById('filtersSidebar');
+            filters.classList.toggle('active');
+        });
+    </script>
+    
+</body>
