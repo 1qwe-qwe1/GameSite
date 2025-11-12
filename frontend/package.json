@@ -4,7 +4,7 @@
   "description": "",
   "main": "tailwind.config.js",
   "scripts": {
-    "start": "http-server -p 3000",
+    "start": "http-server -p 3000 public/main.html",
     "build:css": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch"
   },
   "devDependencies": {

@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FIREBASE_API_KEY=AIzaSyDuYb4O0s7accu6T5MSbJ6WUiSpwnJI6gk
+      - FIREBASE_AUTH_DOMAIN=gamestore-8a2a3.firebaseapp.com
+      - FIREBASE_DATABASE_URL=https://gamestore-8a2a3-default-rtdb.firebaseio.com
+      - FIREBASE_PROJECT_ID=gamestore-8a2a3
+      - FIREBASE_STORAGE_BUCKET=gamestore-8a2a3.firebasestorage.app
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - backend

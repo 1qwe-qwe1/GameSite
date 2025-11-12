@@ -1,0 +1,12 @@
+{
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false,
+    "json.schemaDownload.enable": false,
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
+}
