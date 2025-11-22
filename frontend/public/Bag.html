@@ -3,141 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Корзина | BoardGameHub</title>
+    <meta name="robots" content="noindex, follow">
+    <meta name="description" content="Корзина покупок в магазине настольных игр BoardGameHub. Оформление заказа настольных игр с доставкой по России.">
+    <title>Корзина | BoardGameHub | Интернет магазин настольных игр</title>
+    
+    <!-- Open Graph метатеги -->
+    <meta property="og:title" content="Корзина | BoardGameHub">
+    <meta property="og:description" content="Оформление заказа настольных игр с доставкой по России">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boardgamehub.ru/bag">
+    
+    <!-- Каноническая ссылка -->
+    <link rel="canonical" href="https://boardgamehub.ru/bag">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="images/icon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="C:\Users\user\Desktop\учёба\Веб\GameSite\images\icon.png">
+    
+    <!-- Предзагрузка критического CSS -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.rel='stylesheet'">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
+        /* Критический CSS для ускорения загрузки */
+        .header-logo { opacity: 0; }
+        .loaded .header-logo { opacity: 1; transition: opacity 0.3s ease; }
+        
+        /* Анимации с учетом prefers-reduced-motion */
+        @media (prefers-reduced-motion: no-preference) {
+            .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+            .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         }
         
-        body {
-            background-color: #ffffff;
-            color: #1a1a1a;
-            line-height: 1.6;
+        /* Минимальные размеры для сенсорных элементов */
+        .touch-target { min-width: 44px; min-height: 44px; }
+        
+        /* Компактная шапка для мобильных устройств */
+        @media (max-width: 1024px) {
+            .compact-header { padding-top: 0.75rem; padding-bottom: 0.75rem; }
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* Адаптивное меню */
+        @media (max-width: 768px) {
+            .compact-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .compact-nav li {
+                margin: 0 0.25rem;
+            }
+            
+            .compact-nav a {
+                font-size: 0.875rem;
+                padding: 0.25rem 0.5rem;
+            }
         }
         
-        /* Header styles */
-        header {
-            background-color: #ffffff;
-            padding: 0;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        @media (max-width: 640px) {
+            .compact-nav a {
+                font-size: 0.8rem;
+                padding: 0.25rem;
+            }
+            
+            .header-icons {
+                margin-top: 0.5rem;
+            }
         }
         
-        .offers {
-            background-color: #ffd700;
-            padding: 12px 0;
-            text-align: center;
-        }
-        
-        .offers p {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin: 0;
-        }
-        
-        .offers span {
-            background-color: #1a1a1a;
-            color: #ffd700;
-            padding: 3px 10px;
-            border-radius: 4px;
-            margin: 0 5px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .logo {
-            font-size: 26px;
-            font-weight: 800;
-            color: #1a1a1a;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo span {
-            color: #ffd700;
-            margin-right: 5px;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 30px;
-        }
-        
-        nav ul li a {
-            color: #1a1a1a;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            position: relative;
-            padding: 5px 0;
-            transition: all 0.3s;
-        }
-        
-        nav ul li a:hover {
-            color: #ffd700;
-        }
-        
-        nav ul li a::after {
-            content: '';
+        /* Позиционирование счетчика корзины */
+        .cart-counter {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #ffd700;
-            transition: width 0.3s;
-        }
-        
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-        
-        .icon-links {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .icon-links a {
-            color: #1a1a1a;
-            font-size: 20px;
-            transition: color 0.3s;
-            position: relative;
-        }
-        
-        .icon-links a:hover {
-            color: #ffd700;
-        }
-        
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: #ffd700;
-            color: #1a1a1a;
-            font-size: 12px;
+            top: -6px;
+            right: -6px;
+            background-color: #f59e0b;
+            color: black;
+            font-size: 0.75rem;
             width: 18px;
             height: 18px;
             border-radius: 50%;
@@ -147,872 +88,290 @@
             font-weight: bold;
         }
         
-        /* Page header */
-        .page-header {
-            background-color: #f8f8f8;
-            padding: 40px 0;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        
-        .page-header h1 {
-            font-size: 36px;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-        }
-        
+        /* Стили для хлебных крошек */
         .breadcrumb {
             display: flex;
-            justify-content: center;
-            list-style: none;
-        }
-        
-        .breadcrumb li {
-            margin: 0 10px;
-            font-size: 14px;
-            color: #7a7a7a;
-        }
-        
-        .breadcrumb li a {
-            color: #1a1a1a;
-            text-decoration: none;
-        }
-        
-        .breadcrumb li a:hover {
-            color: #ffd700;
-        }
-        
-        .breadcrumb li::after {
-            content: '/';
-            margin-left: 10px;
-            color: #7a7a7a;
-        }
-        
-        .breadcrumb li:last-child::after {
-            content: '';
-        }
-        
-        /* Cart layout */
-        .cart-layout {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 30px;
-            margin-bottom: 70px;
-        }
-        
-        /* Cart items */
-        .cart-items {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            padding: 25px;
-        }
-        
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
-        .cart-header h2 {
-            font-size: 24px;
-            color: #1a1a1a;
+        .breadcrumb-item:not(:last-child)::after {
+            content: "/";
+            margin-left: 0.5rem;
+            color: #6b7280;
         }
         
-        .clear-cart {
-            color: #7a7a7a;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .clear-cart:hover {
-            color: #e74c3c;
-        }
-        
-        .cart-item {
-            display: grid;
-            grid-template-columns: 100px 1fr auto;
-            gap: 20px;
-            padding: 20px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-        
-        .cart-item-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .cart-item-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .cart-item-details h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #1a1a1a;
-        }
-        
-        .cart-item-details p {
-            color: #7a7a7a;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        
-        .cart-item-price {
-            font-weight: 600;
-            color: #1a1a1a;
-            font-size: 18px;
-        }
-        
-        .cart-item-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: space-between;
-        }
-        
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .quantity-btn {
-            background: none;
-            border: none;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 16px;
-            color: #7a7a7a;
-        }
-        
-        .quantity-btn:hover {
-            background-color: #f0f0f0;
-            color: #1a1a1a;
-        }
-        
-        .quantity-input {
-            width: 40px;
-            height: 36px;
-            border: none;
-            text-align: center;
-            font-size: 16px;
-            color: #1a1a1a;
-            background-color: #ffffff;
-        }
-        
-        .remove-item {
-            color: #7a7a7a;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .remove-item:hover {
-            color: #e74c3c;
-        }
-        
-        /* Cart summary */
-        .cart-summary {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            padding: 25px;
-            height: fit-content;
-        }
-        
-        .cart-summary h2 {
-            font-size: 24px;
-            color: #1a1a1a;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        
-        .summary-row:last-child {
-            margin-bottom: 0;
-        }
-        
-        .summary-label {
-            color: #7a7a7a;
-        }
-        
-        .summary-value {
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-        
-        .discount {
-            color: #27ae60;
-        }
-        
-        .total-row {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #f0f0f0;
-            font-size: 18px;
-        }
-        
-        .total-row .summary-label {
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-        
-        .total-row .summary-value {
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-        
-        .promo-code {
-            margin: 25px 0;
-            padding: 20px 0;
-            border-top: 1px solid #f0f0f0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .promo-code h3 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #1a1a1a;
-        }
-        
-        .promo-form {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .promo-form input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .promo-form button {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .promo-form button:hover {
-            background-color: #333333;
-        }
-        
-        .checkout-btn {
-            display: block;
-            width: 100%;
-            background-color: #ffd700;
-            color: #1a1a1a;
-            border: none;
-            padding: 16px;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-            text-align: center;
-            text-decoration: none;
-        }
-        
-        .checkout-btn:hover {
-            background-color: #f0c900;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-        }
-        
-        .continue-shopping {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: #7a7a7a;
-            text-decoration: none;
-        }
-        
-        .continue-shopping:hover {
-            color: #ffd700;
-        }
-        
-        /* Empty cart */
-        .empty-cart {
-            text-align: center;
-            padding: 60px 20px;
-        }
-        
-        .empty-cart i {
-            font-size: 64px;
-            color: #e0e0e0;
-            margin-bottom: 20px;
-        }
-        
-        .empty-cart h2 {
-            font-size: 24px;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-        }
-        
-        .empty-cart p {
-            color: #7a7a7a;
-            margin-bottom: 30px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* Recommended products */
-        .recommended {
-            margin-bottom: 70px;
-        }
-        
-        .recommended h2 {
-            font-size: 24px;
-            color: #1a1a1a;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
-        }
-        
-        .product-card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-        }
-        
-        .product-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 3px solid #ffd700;
-        }
-        
-        .product-content {
-            padding: 20px;
-        }
-        
-        .product-content h3 {
-            margin-bottom: 10px;
-            color: #1a1a1a;
-            font-size: 18px;
-        }
-        
-        .product-content p {
-            color: #7a7a7a;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        
-        .price {
-            font-size: 20px;
-            font-weight: bold;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .price span {
-            background-color: #ffd700;
-            color: #1a1a1a;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-        
-        .product-card .btn {
-            width: 100%;
-            text-align: center;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            padding: 70px 0 30px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-section h3 {
-            margin-bottom: 25px;
-            font-size: 18px;
-            color: #ffd700;
-        }
-        
-        .footer-section p {
-            color: #cccccc;
-            margin-bottom: 20px;
-            line-height: 1.8;
-        }
-        
-        .footer-section ul {
-            list-style: none;
-        }
-        
-        .footer-section ul li {
-            margin-bottom: 12px;
-        }
-        
-        .footer-section ul li a {
-            color: #cccccc;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-section ul li a:hover {
-            color: #ffd700;
-        }
-        
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .social-icons a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: #2a2a2a;
-            color: #ffffff;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-        
-        .social-icons a:hover {
-            background-color: #ffd700;
-            color: #1a1a1a;
-            transform: translateY(-3px);
-        }
-        
-        .contact-info li {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            color: #cccccc;
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid #333333;
-            color: #9a9a9a;
-            font-size: 14px;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: #ffd700;
-            color: #1a1a1a;
-            padding: 12px 24px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        
-        .btn:hover {
-            background-color: #f0c900;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-        }
-        
-        /* Responsive design */
-        @media (max-width: 992px) {
-            .cart-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .cart-summary {
-                order: -1;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 0 10px 10px;
-            }
-            
-            .cart-item {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .cart-item-controls {
-                align-items: center;
-            }
-            
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Стили для пустой корзины */
+        .empty-cart-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
         }
     </style>
 </head>
-<body>
-    <!-- Header with navigation and offers -->
-    <header>
-        <div class="offers">
-            <p>🚀 <span>СКИДКА 15%</span> на первую покупку при регистрации | 🎁 <span>БЕСПЛАТНАЯ ДОСТАВКА</span> от 3000 руб.</p>
-        </div>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo"><span>♟️</span> BoardGameHub</div>
-                <nav>
-                    <ul>
-                        <li><a href="ProductCatalog.html">Каталог товаров</a></li>
-                        <li><a href="Blog.html">Блог</a></li>
-                        <li><a href="#">О нас</a></li>
-                        <li><a href="#">Доставка</a></li>
-                        <li><a href="#">Контакты</a></li>
+<body class="bg-white text-gray-900">
+    <!-- Header с адаптивной навигацией -->
+    <header class="bg-white shadow-lg sticky top-0 z-50 compact-header">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="flex flex-col lg:flex-row justify-between items-center py-3 lg:py-4 gap-3 lg:gap-4">
+                <!-- Логотип -->
+                <div class="text-xl lg:text-2xl font-black flex items-center header-logo">
+                    <span class="text-yellow-500 mr-1">♟️</span> 
+                    <span>BoardGameHub</span>
+                </div>
+                
+                <!-- Адаптивное меню -->
+                <nav class="w-full lg:w-auto">
+                    <!-- Десктопное меню -->
+                    <ul class="flex flex-wrap justify-center compact-nav space-x-0 lg:space-x-6 xl:space-x-8">
+                        <li><a href="ProductCatalog.html" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Каталог товаров</a></li>
+                        <li><a href="Blog.html" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Блог</a></li>
+                        <li><a href="#" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">О нас</a></li>
+                        <li><a href="#" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Доставка</a></li>
+                        <li><a href="#" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Контакты</a></li>
                     </ul>
                 </nav>
-                <div class="icon-links">
-                    <a href="#" style="color: #ffd700;">
+                
+                <!-- Иконки пользователя и корзины -->
+                <div class="flex gap-3 lg:gap-4 header-icons">
+                    <a href="Bag.html" class="touch-target text-yellow-500 text-lg lg:text-xl hover:text-yellow-500 transition-colors duration-300 relative flex items-center justify-center">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">3</span>
+                        <span class="cart-counter">0</span>
                     </a>
-                    <a href="#"><i class="fas fa-user"></i></a>
+                    <a href="PersonalAccount.html" class="touch-target text-black text-lg lg:text-xl hover:text-yellow-500 transition-colors duration-300 flex items-center justify-center">
+                        <i class="fas fa-user"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Page header -->
-    <div class="page-header">
-        <div class="container">
-            <h1>Корзина</h1>
-            <ul class="breadcrumb">
-                <li><a href="main.html">Главная</a></li>
-                <li>Корзина</li>
-            </ul>
+    <div class="bg-gray-50 py-8 md:py-10 lg:py-12 mb-8 lg:mb-12">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="text-center">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 lg:mb-4">Корзина</h1>
+                <div class="breadcrumb justify-center text-sm sm:text-base">
+                    <a href="main.html" class="breadcrumb-item text-gray-600 hover:text-yellow-500 transition-colors duration-300">Главная</a>
+                    <span class="breadcrumb-item text-gray-400">Корзина</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Cart section -->
-    <section class="container">
-        <div class="cart-layout">
+    <section class="container mx-auto px-4 sm:px-6 mb-12 lg:mb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             <!-- Cart items -->
-            <div class="cart-items">
-                <div class="cart-header">
-                    <h2>Товары в корзине</h2>
-                    <button class="clear-cart">
-                        <i class="fas fa-trash"></i> Очистить корзину
-                    </button>
-                </div>
-                
-                <!-- Cart item 1 -->
-                <div class="cart-item">
-                    <div class="cart-item-image">
-                        <img src="images/catan2.jpg" alt="Колонизаторы">
-                    </div>
-                    <div class="cart-item-details">
-                        <h3>Колонизаторы</h3>
-                        <p>Классическая стратегическая игра для 3-4 игроков</p>
-                        <div class="cart-item-price">2 990 ₽</div>
-                    </div>
-                    <div class="cart-item-controls">
-                        <div class="quantity-controls">
-                            <button class="quantity-btn">-</button>
-                            <input type="text" class="quantity-input" value="1">
-                            <button class="quantity-btn">+</button>
-                        </div>
-                        <button class="remove-item">
-                            <i class="fas fa-times"></i> Удалить
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-6 lg:mb-8">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 pb-4 border-b border-gray-100 gap-3">
+                        <h2 class="text-xl sm:text-2xl font-bold">Товары в корзине</h2>
+                        <button class="clear-cart-btn text-gray-500 hover:text-red-500 transition-colors duration-300 flex items-center gap-2 text-sm sm:text-base">
+                            <i class="fas fa-trash"></i> Очистить корзину
                         </button>
                     </div>
-                </div>
-                
-                <!-- Cart item 2 -->
-                <div class="cart-item">
-                    <div class="cart-item-image">
-                        <img src="images/Karcasson.jpg" alt="Каркассон">
-                    </div>
-                    <div class="cart-item-details">
-                        <h3>Каркассон</h3>
-                        <p>Стратегическая игра с плитками местности</p>
-                        <div class="cart-item-price">2 490 ₽</div>
-                    </div>
-                    <div class="cart-item-controls">
-                        <div class="quantity-controls">
-                            <button class="quantity-btn">-</button>
-                            <input type="text" class="quantity-input" value="1">
-                            <button class="quantity-btn">+</button>
+                    
+                    <!-- Контейнер для товаров корзины -->
+                    <div id="cartItemsContainer">
+                        <!-- Сообщение о пустой корзине -->
+                        <div class="empty-cart text-center py-8 lg:py-12">
+                            <div class="empty-cart-icon text-yellow-500">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h3 class="text-lg sm:text-xl font-semibold mb-2">Ваша корзина пуста</h3>
+                            <p class="text-gray-600 mb-4 sm:mb-6 max-w-md mx-auto text-sm sm:text-base">Добавьте товары из каталога, чтобы продолжить покупки</p>
+                            <a href="ProductCatalog.html" class="inline-block bg-yellow-500 text-black px-5 py-2.5 sm:px-6 sm:py-3 rounded font-semibold transition-all duration-300 hover:bg-yellow-400 touch-target text-sm sm:text-base">
+                                Перейти в каталог
+                            </a>
                         </div>
-                        <button class="remove-item">
-                            <i class="fas fa-times"></i> Удалить
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Cart item 3 -->
-                <div class="cart-item">
-                    <div class="cart-item-image">
-                        <img src="images/monopoly.jpg" alt="Монополия">
-                    </div>
-                    <div class="cart-item-details">
-                        <h3>Монополия</h3>
-                        <p>Классическая экономическая игра для всей семьи</p>
-                        <div class="cart-item-price">1 790 ₽</div>
-                    </div>
-                    <div class="cart-item-controls">
-                        <div class="quantity-controls">
-                            <button class="quantity-btn">-</button>
-                            <input type="text" class="quantity-input" value="1">
-                            <button class="quantity-btn">+</button>
-                        </div>
-                        <button class="remove-item">
-                            <i class="fas fa-times"></i> Удалить
-                        </button>
                     </div>
                 </div>
             </div>
             
             <!-- Cart summary -->
-            <div class="cart-summary">
-                <h2>Сумма заказа</h2>
-                
-                <div class="summary-row">
-                    <span class="summary-label">Товары (3)</span>
-                    <span class="summary-value">7 270 ₽</span>
-                </div>
-                
-                <div class="summary-row">
-                    <span class="summary-label">Скидка</span>
-                    <span class="summary-value discount">-1 090 ₽</span>
-                </div>
-                
-                <div class="summary-row">
-                    <span class="summary-label">Доставка</span>
-                    <span class="summary-value">Бесплатно</span>
-                </div>
-                
-                <div class="promo-code">
-                    <h3>Промокод</h3>
-                    <div class="promo-form">
-                        <input type="text" placeholder="Введите промокод">
-                        <button type="submit">Применить</button>
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 sticky top-24">
+                    <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 pb-4 border-b border-gray-100">Сумма заказа</h2>
+                    
+                    <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                        <div class="summary-row flex justify-between">
+                            <span class="summary-label text-gray-600 text-sm sm:text-base">Товары (0)</span>
+                            <span class="summary-value font-semibold text-sm sm:text-base">0 ₽</span>
+                        </div>
+                        
+                        <div class="summary-row flex justify-between">
+                            <span class="summary-label text-gray-600 text-sm sm:text-base">Скидка</span>
+                            <span class="summary-value font-semibold text-green-600 text-sm sm:text-base">-0 ₽</span>
+                        </div>
+                        
+                        <div class="summary-row flex justify-between">
+                            <span class="summary-label text-gray-600 text-sm sm:text-base">Доставка</span>
+                            <span class="summary-value font-semibold text-sm sm:text-base">Бесплатно</span>
+                        </div>
                     </div>
+                    
+                    <div class="py-4 sm:py-6 border-y border-gray-100 mb-4 sm:mb-6">
+                        <h3 class="font-semibold mb-3 text-sm sm:text-base">Промокод</h3>
+                        <div class="flex gap-2">
+                            <input type="text" placeholder="Введите промокод" class="flex-1 px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base">
+                            <button class="bg-black text-white px-3 py-2 sm:px-4 sm:py-2 rounded font-semibold transition-colors duration-300 hover:bg-gray-800 touch-target text-sm sm:text-base">Применить</button>
+                        </div>
+                    </div>
+                    
+                    <div class="total-row flex justify-between text-lg sm:text-xl font-bold mb-4 sm:mb-6">
+                        <span class="summary-label">Итого</span>
+                        <span class="summary-value">0 ₽</span>
+                    </div>
+                    
+                    <a href="#" class="checkout-btn block w-full bg-yellow-500 text-black px-4 py-3 sm:px-6 sm:py-4 rounded font-semibold text-center transition-all duration-300 hover:bg-yellow-400 hover:-translate-y-1 mb-3 sm:mb-4 touch-target text-sm sm:text-base">
+                        Оформить заказ
+                    </a>
+                    <a href="ProductCatalog.html" class="block text-center text-gray-500 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">
+                        Продолжить покупки
+                    </a>
                 </div>
-                
-                <div class="summary-row total-row">
-                    <span class="summary-label">Итого</span>
-                    <span class="summary-value">6 180 ₽</span>
-                </div>
-                
-                <a href="#" class="checkout-btn">Оформить заказ</a>
-                <a href="#" class="continue-shopping">Продолжить покупки</a>
             </div>
         </div>
     </section>
 
     <!-- Recommended products -->
-    <section class="container recommended">
-        <h2>Рекомендуемые товары</h2>
-        <div class="products-grid">
-            <div class="product-card">
-                <img src="images/Jenga.jpg" alt="Дженга">
-                <div class="product-content">
-                    <h3>Дженга</h3>
-                    <p>Знаменитая игра на ловкость и аккуратность</p>
-                    <div class="price">
-                        1 290 ₽
-                        <span>Новинка</span>
+    <section class="container mx-auto px-4 sm:px-6 mb-12 lg:mb-16">
+        <h2 class="text-xl sm:text-2xl lg:text-3xl text-center mb-6 lg:mb-8 relative pb-4 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-12 sm:after:w-16 after:h-1 after:bg-yellow-500">Рекомендуемые товары</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
+            <!-- Товар 1 -->
+            <div class="bg-white rounded-lg shadow-lg hover-lift">
+                <img src="C:\Users\user\Desktop\учёба\Веб\GameSite\images\Jenga.jpg" alt="Дженга" class="w-full h-40 sm:h-48 object-cover border-b-4 border-yellow-500" loading="lazy">
+                <div class="p-4 sm:p-5">
+                    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3">Дженга</h3>
+                    <p class="text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">Знаменитая игра на ловкость и аккуратность</p>
+                    <div class="flex justify-between items-center mb-3 sm:mb-4">
+                        <span class="text-lg sm:text-xl font-bold">1 290 ₽</span>
+                        <span class="bg-yellow-500 text-black px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm">Новинка</span>
                     </div>
-                    <a href="#" class="btn">В корзину</a>
+                    <button onclick="addToCart('jenga', 'Дженга', 1290, 'C:\\Users\\user\\Desktop\\учёба\\Веб\\GameSite\\images\\Jenga.jpg', 'Знаменитая игра на ловкость и аккуратность')" 
+                            class="w-full bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold text-xs sm:text-sm text-center transition-all duration-300 hover:bg-yellow-400 touch-target">
+                        В корзину
+                    </button>
                 </div>
             </div>
             
-            <div class="product-card">
-                <img src="images/mafia.jpg" alt="Мафия">
-                <div class="product-content">
-                    <h3>Мафия</h3>
-                    <p>Культовая психологическая игра для компании</p>
-                    <div class="price">
-                        1 590 ₽
-                        <span>Выбор</span>
+            <!-- Товар 2 -->
+            <div class="bg-white rounded-lg shadow-lg hover-lift">
+                <img src="C:\Users\user\Desktop\учёба\Веб\GameSite\images\mafia.jpg" alt="Мафия" class="w-full h-40 sm:h-48 object-cover border-b-4 border-yellow-500" loading="lazy">
+                <div class="p-4 sm:p-5">
+                    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3">Мафия</h3>
+                    <p class="text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">Культовая психологическая игра для компании</p>
+                    <div class="flex justify-between items-center mb-3 sm:mb-4">
+                        <span class="text-lg sm:text-xl font-bold">1 590 ₽</span>
+                        <span class="bg-yellow-500 text-black px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm">Выбор</span>
                     </div>
-                    <a href="#" class="btn">В корзину</a>
+                    <button onclick="addToCart('mafia', 'Мафия', 1590, 'C:\\Users\\user\\Desktop\\учёба\\Веб\\GameSite\\images\\mafia.jpg', 'Культовая психологическая игра для компании')" 
+                            class="w-full bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold text-xs sm:text-sm text-center transition-all duration-300 hover:bg-yellow-400 touch-target">
+                        В корзину
+                    </button>
                 </div>
             </div>
             
-            <div class="product-card">
-                <img src="images/eki.jpg" alt="Экивоки">
-                <div class="product-content">
-                    <h3>Экивоки</h3>
-                    <p>Веселая игра для компании, где нужно объяснять слова</p>
-                    <div class="price">
-                        2 190 ₽
-                        <span>-5%</span>
+            <!-- Товар 3 -->
+            <div class="bg-white rounded-lg shadow-lg hover-lift">
+                <img src="C:\Users\user\Desktop\учёба\Веб\GameSite\images\eki.jpg" alt="Экивоки" class="w-full h-40 sm:h-48 object-cover border-b-4 border-yellow-500" loading="lazy">
+                <div class="p-4 sm:p-5">
+                    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3">Экивоки</h3>
+                    <p class="text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">Веселая игра для компании, где нужно объяснять слова</p>
+                    <div class="flex justify-between items-center mb-3 sm:mb-4">
+                        <span class="text-lg sm:text-xl font-bold">2 190 ₽</span>
+                        <span class="bg-yellow-500 text-black px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm">-5%</span>
                     </div>
-                    <a href="#" class="btn">В корзину</a>
+                    <button onclick="addToCart('ekivoki', 'Экивоки', 2190, 'C:\\Users\\user\\Desktop\\учёба\\Веб\\GameSite\\images\\eki.jpg', 'Веселая игра для компании, где нужно объяснять слова')" 
+                            class="w-full bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold text-xs sm:text-sm text-center transition-all duration-300 hover:bg-yellow-400 touch-target">
+                        В корзину
+                    </button>
                 </div>
             </div>
             
-            <div class="product-card">
-                <img src="images/man.jpg" alt="Манчкин">
-                <div class="product-content">
-                    <h3>Манчкин</h3>
-                    <p>Юмористическая карточная игра в жанре фэнтези</p>
-                    <div class="price">
-                        1 690 ₽
-                        <span>Хит</span>
+            <!-- Товар 4 -->
+            <div class="bg-white rounded-lg shadow-lg hover-lift">
+                <img src="C:\Users\user\Desktop\учёба\Веб\GameSite\images\man.jpg" alt="Манчкин" class="w-full h-40 sm:h-48 object-cover border-b-4 border-yellow-500" loading="lazy">
+                <div class="p-4 sm:p-5">
+                    <h3 class="text-base sm:text-lg font-semibold mb-2 sm:mb-3">Манчкин</h3>
+                    <p class="text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">Юмористическая карточная игра в жанре фэнтези</p>
+                    <div class="flex justify-between items-center mb-3 sm:mb-4">
+                        <span class="text-lg sm:text-xl font-bold">1 690 ₽</span>
+                        <span class="bg-yellow-500 text-black px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm">Хит</span>
                     </div>
-                    <a href="#" class="btn">В корзину</a>
+                    <button onclick="addToCart('munchkin', 'Манчкин', 1690, 'C:\\Users\\user\\Desktop\\учёба\\Веб\\GameSite\\images\\man.jpg', 'Юмористическая карточная игра в жанре фэнтези')" 
+                            class="w-full bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold text-xs sm:text-sm text-center transition-all duration-300 hover:bg-yellow-400 touch-target">
+                        В корзину
+                    </button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>BoardGameHub</h3>
-                    <p>Лучший выбор настольных игр для всей семьи с доставкой по всей России. Присоединяйтесь к нашему сообществу!</p>
-                    <div class="social-icons">
-                        <a href="#"><i class="fab fa-vk"></i></a>
-                        <a href="#"><i class="fab fa-telegram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+    <!-- Футер с адаптивной сеткой -->
+    <footer class="bg-black text-white pt-10 lg:pt-14 xl:pt-16 pb-6 lg:pb-8">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 xl:gap-10 mb-8 lg:mb-10">
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">BoardGameHub</h3>
+                    <p class="text-gray-300 mb-4 sm:mb-5 leading-relaxed text-sm sm:text-base">Лучший выбор настольных игр для всей семьи с доставкой по всей России. Присоединяйтесь к нашему сообществу!</p>
+                    <div class="flex gap-3 sm:gap-4 mt-4 sm:mt-5">
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="ВКонтакте"><i class="fab fa-vk text-sm sm:text-base"></i></a>
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="Телеграм"><i class="fab fa-telegram text-sm sm:text-base"></i></a>
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="YouTube"><i class="fab fa-youtube text-sm sm:text-base"></i></a>
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="Instagram"><i class="fab fa-instagram text-sm sm:text-base"></i></a>
                     </div>
                 </div>
-                <div class="footer-section">
-                    <h3>Каталог</h3>
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">Каталог</h3>
                     <ul>
-                        <li><a href="#">Семейные игры</a></li>
-                        <li><a href="#">Стратегии</a></li>
-                        <li><a href="#">Детские игры</a></li>
-                        <li><a href="#">Кооперативные игры</a></li>
-                        <li><a href="#">Для вечеринок</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Семейные игры</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Стратегии</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Детские игры</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Кооперативные игры</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Для вечеринок</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h3>Информация</h3>
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">Информация</h3>
                     <ul>
-                        <li><a href="#">О нас</a></li>
-                        <li><a href="#">Доставка и оплата</a></li>
-                        <li><a href="#">Контакты</a></li>
-                        <li><a href="#">Блог</a></li>
-                        <li><a href="#">Акции</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">О нас</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Доставка и оплата</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Контакты</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="Blog.html" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Блог</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Акции</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h3>Контакты</h3>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Игровая, 15</li>
-                        <li><i class="fas fa-phone"></i> +7 (495) 123-45-67</li>
-                        <li><i class="fas fa-envelope"></i> info@boardgamehub.ru</li>
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">Контакты</h3>
+                    <ul class="space-y-3 sm:space-y-4">
+                        <li class="flex items-center gap-3 sm:gap-4 text-gray-300 text-sm sm:text-base"><i class="fas fa-map-marker-alt"></i> Москва, ул. Игровая, 15</li>
+                        <li class="flex items-center gap-3 sm:gap-4 text-gray-300 text-sm sm:text-base"><i class="fas fa-phone"></i> +7 (495) 123-45-67</li>
+                        <li class="flex items-center gap-3 sm:gap-4 text-gray-300 text-sm sm:text-base"><i class="fas fa-envelope"></i> info@boardgamehub.ru</li>
                     </ul>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 mt-6 sm:mt-8 text-yellow-500">Рассылка</h3>
+                    <div class="flex gap-2 sm:gap-3">
+                        <input type="email" placeholder="Ваш email" class="flex-1 px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded border-none text-white placeholder-gray-400 text-sm sm:text-base" aria-label="Email для подписки на рассылку">
+                        <button class="bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold transition-colors duration-300 hover:bg-yellow-400 touch-target text-sm sm:text-base">OK</button>
+                    </div>
                 </div>
             </div>
-            <div class="copyright">
+            <div class="pt-6 sm:pt-8 border-t border-gray-800 text-center text-gray-400 text-xs sm:text-sm">
                 <p>&copy; 2023 BoardGameHub. Все права защищены.</p>
             </div>
         </div>
     </footer>
 
-    <script>
-        // Quantity controls
-        document.querySelectorAll('.quantity-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const input = this.parentNode.querySelector('.quantity-input');
-                let value = parseInt(input.value);
-                
-                if (this.textContent === '+') {
-                    value++;
-                } else if (this.textContent === '-' && value > 1) {
-                    value--;
-                }
-                
-                input.value = value;
-            });
-        });
-        
-        // Remove item
-        document.querySelectorAll('.remove-item').forEach(button => {
-            button.addEventListener('click', function() {
-                this.closest('.cart-item').style.display = 'none';
-            });
-        });
-        
-        // Clear cart
-        document.querySelector('.clear-cart').addEventListener('click', function() {
-            document.querySelectorAll('.cart-item').forEach(item => {
-                item.style.display = 'none';
-            });
+    <!-- Скрипты с defer -->
+    <script defer>
+        // Отметка о загрузке страницы для анимаций
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('loaded');
         });
     </script>
+    
+    <!-- Подключаем файл корзины -->
+    <script src="cart.js"></script>
 </body>
 </html>
