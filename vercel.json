@@ -1,8 +1,9 @@
 {
+  "version": 2,
   "rewrites": [
     { 
       "source": "/(.*)", 
-      "destination": "/public/main.html" 
+      "destination": "/frontend/public/main.html" 
     }
   ]
 }
