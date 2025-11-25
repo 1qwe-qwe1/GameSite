@@ -20,6 +20,11 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <link rel="icon" type="image/x-icon" href="../../images/icon.png">
     
     <style>
@@ -99,6 +104,32 @@
         .blog-card-button {
             margin-top: auto;
         }
+        
+        /* Стили для загрузки */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #f59e0b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -157,84 +188,26 @@
         <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
             <!-- Main content -->
             <div class="lg:w-2/3">
-                <div class="space-y-6 lg:space-y-8">
-                    <!-- Post 1 -->
-                    <article class="bg-white rounded-lg shadow-lg hover-lift blog-card">
-                        <img src="../../images/party2.jpg" alt="Как выбрать первую настольную игру - руководство для новичков" class="w-full h-48 sm:h-56 lg:h-64 object-cover" loading="lazy">
-                        <div class="p-4 sm:p-5 lg:p-6 blog-card-content">
-                            <div class="flex justify-between text-gray-500 text-xs sm:text-sm mb-3 lg:mb-4">
-                                <span class="flex items-center gap-1"><i class="far fa-calendar"></i> 12 мая 2023</span>
-                                <span class="flex items-center gap-1"><i class="far fa-clock"></i> 5 мин чтения</span>
-                                <span class="flex items-center gap-1"><i class="far fa-folder"></i> Советы</span>
-                            </div>
-                            <h2 class="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4">Как выбрать первую настольную игру</h2>
-                            <p class="text-gray-600 mb-4 lg:mb-6 text-sm sm:text-base">Подробное руководство для тех, кто только начинает знакомство с миром настольных игр. Рассказываем, на что обратить внимание при выборе, как учитывать предпочтения игроков и на какие механизмы стоит обратить внимание новичкам.</p>
-                            <div class="mt-auto">
-                                <a href="#" class="inline-block bg-yellow-500 text-black px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 rounded font-semibold text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-400 touch-target w-full text-center">Читать далее</a>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Post 2 -->
-                    <article class="bg-white rounded-lg shadow-lg hover-lift blog-card">
-                        <img src="../../images/top5.jpg" alt="Топ-5 развивающих настольных игр для детей разных возрастов" class="w-full h-48 sm:h-56 lg:h-64 object-cover" loading="lazy">
-                        <div class="p-4 sm:p-5 lg:p-6 blog-card-content">
-                            <div class="flex justify-between text-gray-500 text-xs sm:text-sm mb-3 lg:mb-4">
-                                <span class="flex items-center gap-1"><i class="far fa-calendar"></i> 5 мая 2023</span>
-                                <span class="flex items-center gap-1"><i class="far fa-clock"></i> 7 мин чтения</span>
-                                <span class="flex items-center gap-1"><i class="far fa-folder"></i> Обзоры</span>
-                            </div>
-                            <h2 class="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4">Топ-5 развивающих игр для детей</h2>
-                            <p class="text-gray-600 mb-4 lg:mb-6 text-sm sm:text-base">Лучшие игры, которые помогут развить логику, стратегическое мышление и коммуникативные навыки у детей разных возрастов. Мы протестировали десятки игр и отобрали самые интересные и полезные из них.</p>
-                            <div class="mt-auto">
-                                <a href="#" class="inline-block bg-yellow-500 text-black px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 rounded font-semibold text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-400 touch-target w-full text-center">Читать далее</a>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Post 3 -->
-                    <article class="bg-white rounded-lg shadow-lg hover-lift blog-card">
-                        <img src="../../images/party.jpg" alt="Как организовать игровую вечеринку с настольными играми для друзей" class="w-full h-48 sm:h-56 lg:h-64 object-cover" loading="lazy">
-                        <div class="p-4 sm:p-5 lg:p-6 blog-card-content">
-                            <div class="flex justify-between text-gray-500 text-xs sm:text-sm mb-3 lg:mb-4">
-                                <span class="flex items-center gap-1"><i class="far fa-calendar"></i> 28 апреля 2023</span>
-                                <span class="flex items-center gap-1"><i class="far fa-clock"></i> 8 мин чтения</span>
-                                <span class="flex items-center gap-1"><i class="far fa-folder"></i> Развлечения</span>
-                            </div>
-                            <h2 class="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4">Как организовать игровую вечеринку</h2>
-                            <p class="text-gray-600 mb-4 lg:mb-6 text-sm sm:text-base">Советы по организации незабываемого вечера с настольными играми для друзей. От выбора игр до подготовки угощений и создания подходящей атмосферы. Все, что нужно знать для успешной игры в компании.</p>
-                            <div class="mt-auto">
-                                <a href="#" class="inline-block bg-yellow-500 text-black px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 rounded font-semibold text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-400 touch-target w-full text-center">Читать далее</a>
-                            </div>
-                        </div>
-                    </article>
-                    
-                    <!-- Post 4 -->
-                    <article class="bg-white rounded-lg shadow-lg hover-lift blog-card">
-                        <img src="../../images/anc.jpg" alt="История настольных игр от древности до наших дней" class="w-full h-48 sm:h-56 lg:h-64 object-cover" loading="lazy">
-                        <div class="p-4 sm:p-5 lg:p-6 blog-card-content">
-                            <div class="flex justify-between text-gray-500 text-xs sm:text-sm mb-3 lg:mb-4">
-                                <span class="flex items-center gap-1"><i class="far fa-calendar"></i> 15 апреля 2023</span>
-                                <span class="flex items-center gap-1"><i class="far fa-clock"></i> 10 мин чтения</span>
-                                <span class="flex items-center gap-1"><i class="far fa-folder"></i> История</span>
-                            </div>
-                            <h2 class="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4">История настольных игр: от древности до наших дней</h2>
-                            <p class="text-gray-600 mb-4 lg:mb-6 text-sm sm:text-base">Путешествие во времени: как настольные игры развивались на протяжении веков. От древнеегипетского сенета до современных стратегий. Узнайте, какие игры были популярны в разные эпохи и как они повлияли на современные игры.</p>
-                            <div class="mt-auto">
-                                <a href="#" class="inline-block bg-yellow-500 text-black px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 rounded font-semibold text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-400 touch-target w-full text-center">Читать далее</a>
-                            </div>
-                        </div>
-                    </article>
+                <!-- Loading indicator -->
+                <div id="loadingIndicator" class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+
+                <!-- Articles container -->
+                <div id="articlesContainer" class="space-y-6 lg:space-y-8 hidden">
+                    <!-- Articles will be dynamically inserted here -->
+                </div>
+
+                <!-- No articles message -->
+                <div id="noArticlesMessage" class="text-center py-12 hidden">
+                    <i class="fas fa-newspaper text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Статьи не найдены</h3>
+                    <p class="text-gray-500">Попробуйте изменить параметры поиска или зайдите позже.</p>
                 </div>
                 
                 <!-- Pagination -->
-                <div class="flex justify-center gap-2 sm:gap-3 mt-8 lg:mt-12">
-                    <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-yellow-500 border border-yellow-500 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-400">1</a>
-                    <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white border border-gray-300 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-500 hover:border-yellow-500">2</a>
-                    <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white border border-gray-300 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-500 hover:border-yellow-500">3</a>
-                    <span class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white rounded flex items-center justify-center text-gray-500 text-sm">...</span>
-                    <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white border border-gray-300 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-500 hover:border-yellow-500">6</a>
-                    <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white border border-gray-300 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-500 hover:border-yellow-500"><i class="fas fa-chevron-right text-xs sm:text-sm"></i></a>
+                <div id="paginationContainer" class="flex justify-center gap-2 sm:gap-3 mt-8 lg:mt-12 hidden">
+                    <!-- Pagination will be dynamically inserted here -->
                 </div>
             </div>
             
@@ -244,78 +217,32 @@
                 <div class="bg-white rounded-lg shadow-lg p-4 sm:p-5 lg:p-6 mb-6 lg:mb-8">
                     <h3 class="text-lg sm:text-xl font-bold mb-4 lg:mb-5 pb-2 lg:pb-3 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 sm:after:w-10 after:h-1 after:bg-yellow-500">Поиск</h3>
                     <div class="space-y-3">
-                        <input type="text" placeholder="Поиск по блогу..." class="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm sm:text-base">
-                        <button class="w-full bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-yellow-400 touch-target">Найти</button>
+                        <input type="text" id="searchInput" placeholder="Поиск по блогу..." class="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm sm:text-base">
+                        <button id="searchButton" class="w-full bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold text-sm sm:text-base transition-all duration-300 hover:bg-yellow-400 touch-target">Найти</button>
                     </div>
                 </div>
                 
                 <!-- Categories widget -->
                 <div class="bg-white rounded-lg shadow-lg p-4 sm:p-5 lg:p-6 mb-6 lg:mb-8">
                     <h3 class="text-lg sm:text-xl font-bold mb-4 lg:mb-5 pb-2 lg:pb-3 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 sm:after:w-10 after:h-1 after:bg-yellow-500">Категории</h3>
-                    <ul class="space-y-2 sm:space-y-3">
-                        <li class="flex justify-between items-center pb-2 sm:pb-3 border-b border-gray-100 last:border-b-0 last:pb-0">
-                            <a href="#" class="text-gray-700 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Советы</a>
-                            <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">12</span>
-                        </li>
-                        <li class="flex justify-between items-center pb-2 sm:pb-3 border-b border-gray-100 last:border-b-0 last:pb-0">
-                            <a href="#" class="text-gray-700 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Обзоры</a>
-                            <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">8</span>
-                        </li>
-                        <li class="flex justify-between items-center pb-2 sm:pb-3 border-b border-gray-100 last:border-b-0 last:pb-0">
-                            <a href="#" class="text-gray-700 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Новости</a>
-                            <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">5</span>
-                        </li>
-                        <li class="flex justify-between items-center pb-2 sm:pb-3 border-b border-gray-100 last:border-b-0 last:pb-0">
-                            <a href="#" class="text-gray-700 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Развлечения</a>
-                            <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">7</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <a href="#" class="text-gray-700 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">История</a>
-                            <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">3</span>
-                        </li>
+                    <ul id="categoriesList" class="space-y-2 sm:space-y-3">
+                        <!-- Categories will be dynamically populated -->
                     </ul>
                 </div>
                 
                 <!-- Popular posts widget -->
                 <div class="bg-white rounded-lg shadow-lg p-4 sm:p-5 lg:p-6 mb-6 lg:mb-8">
                     <h3 class="text-lg sm:text-xl font-bold mb-4 lg:mb-5 pb-2 lg:pb-3 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 sm:after:w-10 after:h-1 after:bg-yellow-500">Популярные статьи</h3>
-                    <ul class="space-y-4 sm:space-y-5">
-                        <li class="flex gap-3 sm:gap-4 pb-4 sm:pb-5 border-b border-gray-100 last:border-b-0 last:pb-0">
-                            <img src="../../images/party2.jpg" alt="Как выбрать первую настольную игру" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" loading="lazy">
-                            <div>
-                                <h4 class="font-semibold mb-1 sm:mb-2 text-sm sm:text-base"><a href="#" class="text-black hover:text-yellow-500 transition-colors duration-300">Как выбрать первую настольную игру</a></h4>
-                                <span class="text-gray-500 text-xs sm:text-sm flex items-center gap-1"><i class="far fa-calendar"></i> 12 мая 2023</span>
-                            </div>
-                        </li>
-                        <li class="flex gap-3 sm:gap-4 pb-4 sm:pb-5 border-b border-gray-100 last:border-b-0 last:pb-0">
-                            <img src="../../images/top5.jpg" alt="Топ-5 развивающих игр для детей" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" loading="lazy">
-                            <div>
-                                <h4 class="font-semibold mb-1 sm:mb-2 text-sm sm:text-base"><a href="#" class="text-black hover:text-yellow-500 transition-colors duration-300">Топ-5 развивающих игр для детей</a></h4>
-                                <span class="text-gray-500 text-xs sm:text-sm flex items-center gap-1"><i class="far fa-calendar"></i> 5 мая 2023</span>
-                            </div>
-                        </li>
-                        <li class="flex gap-3 sm:gap-4">
-                            <img src="../../images/party.jpg" alt="Как организовать игровую вечеринку" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" loading="lazy">
-                            <div>
-                                <h4 class="font-semibold mb-1 sm:mb-2 text-sm sm:text-base"><a href="#" class="text-black hover:text-yellow-500 transition-colors duration-300">Как организовать игровую вечеринку</a></h4>
-                                <span class="text-gray-500 text-xs sm:text-sm flex items-center gap-1"><i class="far fa-calendar"></i> 28 апреля 2023</span>
-                            </div>
-                        </li>
+                    <ul id="popularPostsList" class="space-y-4 sm:space-y-5">
+                        <!-- Popular posts will be dynamically populated -->
                     </ul>
                 </div>
                 
                 <!-- Tags widget -->
                 <div class="bg-white rounded-lg shadow-lg p-4 sm:p-5 lg:p-6 mb-6 lg:mb-8">
                     <h3 class="text-lg sm:text-xl font-bold mb-4 lg:mb-5 pb-2 lg:pb-3 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-8 sm:after:w-10 after:h-1 after:bg-yellow-500">Теги</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Стратегии</a>
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Семейные</a>
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Детские</a>
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Вечеринка</a>
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Обзор</a>
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Советы</a>
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Новинки</a>
-                        <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target">Классика</a>
+                    <div id="tagsContainer" class="flex flex-wrap gap-2">
+                        <!-- Tags will be dynamically populated -->
                     </div>
                 </div>
                 
@@ -380,5 +307,322 @@
             </div>
         </div>
     </footer>
+
+    <!-- Firebase and Blog Script -->
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuYb4O0s7accu6T5MSbJ6WUiSpwnJI6gk",
+            authDomain: "gamestore-8a2a3.firebaseapp.com",
+            databaseURL: "https://gamestore-8a2a3-default-rtdb.firebaseio.com",
+            projectId: "gamestore-8a2a3",
+            storageBucket: "gamestore-8a2a3.firebasestorage.app",
+            messagingSenderId: "630285121213",
+            appId: "1:630285121213:web:6cc7f2cc0350e0f020e9d4",
+            measurementId: "G-3EXSGX4EWJ"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // DOM elements
+        const articlesContainer = document.getElementById('articlesContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const noArticlesMessage = document.getElementById('noArticlesMessage');
+        const paginationContainer = document.getElementById('paginationContainer');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const categoriesList = document.getElementById('categoriesList');
+        const popularPostsList = document.getElementById('popularPostsList');
+        const tagsContainer = document.getElementById('tagsContainer');
+
+        // Global variables
+        let allArticles = [];
+        let filteredArticles = [];
+        let currentPage = 1;
+        const articlesPerPage = 4;
+
+        // Format date function
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('ru-RU', options);
+        }
+
+        // Format reading time
+        function formatReadingTime(minutes) {
+            if (minutes === 1) return '1 мин чтения';
+            if (minutes >= 2 && minutes <= 4) return `${minutes} мин чтения`;
+            return `${minutes} мин чтения`;
+        }
+
+        // Create article card HTML
+        function createArticleCard(article, id) {
+            return `
+                <article class="bg-white rounded-lg shadow-lg hover-lift blog-card">
+                    <img src="../../images/${article.Image || 'default-article.jpg'}" alt="${article.Title}" class="w-full h-48 sm:h-56 lg:h-64 object-cover" loading="lazy">
+                    <div class="p-4 sm:p-5 lg:p-6 blog-card-content">
+                        <div class="flex justify-between text-gray-500 text-xs sm:text-sm mb-3 lg:mb-4">
+                            <span class="flex items-center gap-1"><i class="far fa-calendar"></i> ${formatDate(article.PublishedAt)}</span>
+                            <span class="flex items-center gap-1"><i class="far fa-clock"></i> ${formatReadingTime(article.ReadingTime || 5)}</span>
+                            <span class="flex items-center gap-1"><i class="far fa-folder"></i> ${article.Tags || 'Без категории'}</span>
+                        </div>
+                        <h2 class="text-lg sm:text-xl lg:text-2xl font-bold mb-3 lg:mb-4">${article.Title}</h2>
+                        <p class="text-gray-600 mb-4 lg:mb-6 text-sm sm:text-base">${article.Excerpt || 'Статья без описания'}</p>
+                        <div class="mt-auto">
+                            <a href="article-detail.html?id=${id}" class="inline-block bg-yellow-500 text-black px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 rounded font-semibold text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-400 touch-target w-full text-center">Читать далее</a>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+
+        // Create popular post HTML
+        function createPopularPost(article, id) {
+            return `
+                <li class="flex gap-3 sm:gap-4 pb-4 sm:pb-5 border-b border-gray-100 last:border-b-0 last:pb-0">
+                    <img src="../../images/${article.Image || 'default-article.jpg'}" alt="${article.Title}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" loading="lazy">
+                    <div>
+                        <h4 class="font-semibold mb-1 sm:mb-2 text-sm sm:text-base"><a href="article-detail.html?id=${id}" class="text-black hover:text-yellow-500 transition-colors duration-300">${article.Title}</a></h4>
+                        <span class="text-gray-500 text-xs sm:text-sm flex items-center gap-1"><i class="far fa-calendar"></i> ${formatDate(article.PublishedAt)}</span>
+                    </div>
+                </li>
+            `;
+        }
+
+        // Create category item HTML
+        function createCategoryItem(category, count) {
+            return `
+                <li class="flex justify-between items-center pb-2 sm:pb-3 border-b border-gray-100 last:border-b-0 last:pb-0">
+                    <a href="#" class="text-gray-700 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base category-filter" data-category="${category}">${category}</a>
+                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">${count}</span>
+                </li>
+            `;
+        }
+
+        // Create tag HTML
+        function createTag(tag) {
+            return `
+                <a href="#" class="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 sm:py-2 rounded-full text-xs sm:text-sm transition-all duration-300 hover:bg-yellow-500 hover:text-black touch-target tag-filter" data-tag="${tag}">${tag}</a>
+            `;
+        }
+
+        // Create pagination HTML
+        function createPagination(totalPages) {
+            let paginationHTML = '';
+            
+            if (currentPage > 1) {
+                paginationHTML += `<a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white border border-gray-300 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-500 hover:border-yellow-500 pagination-btn" data-page="${currentPage - 1}"><i class="fas fa-chevron-left text-xs sm:text-sm"></i></a>`;
+            }
+            
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    paginationHTML += `<a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-yellow-500 border border-yellow-500 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-400">${i}</a>`;
+                } else {
+                    paginationHTML += `<a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white border border-gray-300 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-500 hover:border-yellow-500 pagination-btn" data-page="${i}">${i}</a>`;
+                }
+            }
+            
+            if (currentPage < totalPages) {
+                paginationHTML += `<a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-white border border-gray-300 rounded flex items-center justify-center font-semibold text-sm transition-all duration-300 hover:bg-yellow-500 hover:border-yellow-500 pagination-btn" data-page="${currentPage + 1}"><i class="fas fa-chevron-right text-xs sm:text-sm"></i></a>`;
+            }
+            
+            return paginationHTML;
+        }
+
+        // Filter articles by search term
+        function filterArticles(searchTerm = '') {
+            if (!searchTerm.trim()) {
+                filteredArticles = [...allArticles];
+            } else {
+                const term = searchTerm.toLowerCase();
+                filteredArticles = allArticles.filter(article => 
+                    article.Title.toLowerCase().includes(term) ||
+                    article.Excerpt.toLowerCase().includes(term) ||
+                    (article.Tags && article.Tags.toLowerCase().includes(term))
+                );
+            }
+            
+            // Sort by publication date (newest first)
+            filteredArticles.sort((a, b) => new Date(b.PublishedAt) - new Date(a.PublishedAt));
+            
+            currentPage = 1;
+            renderArticles();
+        }
+
+        // Filter articles by category
+        function filterByCategory(category) {
+            if (category === 'all') {
+                filteredArticles = [...allArticles];
+            } else {
+                filteredArticles = allArticles.filter(article => 
+                    article.Tags && article.Tags === category
+                );
+            }
+            
+            currentPage = 1;
+            renderArticles();
+        }
+
+        // Render articles for current page
+        function renderArticles() {
+            const startIndex = (currentPage - 1) * articlesPerPage;
+            const endIndex = startIndex + articlesPerPage;
+            const articlesToShow = filteredArticles.slice(startIndex, endIndex);
+            
+            if (articlesToShow.length === 0) {
+                articlesContainer.classList.add('hidden');
+                noArticlesMessage.classList.remove('hidden');
+                paginationContainer.classList.add('hidden');
+            } else {
+                articlesContainer.innerHTML = articlesToShow.map(article => 
+                    createArticleCard(article.article, article.id)
+                ).join('');
+                
+                articlesContainer.classList.remove('hidden');
+                noArticlesMessage.classList.add('hidden');
+                
+                // Render pagination
+                const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
+                if (totalPages > 1) {
+                    paginationContainer.innerHTML = createPagination(totalPages);
+                    paginationContainer.classList.remove('hidden');
+                } else {
+                    paginationContainer.classList.add('hidden');
+                }
+            }
+        }
+
+        // Load articles from Firebase
+        async function loadArticles() {
+            try {
+                loadingIndicator.classList.remove('hidden');
+                articlesContainer.classList.add('hidden');
+                noArticlesMessage.classList.add('hidden');
+                paginationContainer.classList.add('hidden');
+                
+                const snapshot = await database.ref('Articles').once('value');
+                const articlesData = snapshot.val();
+                
+                allArticles = [];
+                
+                if (articlesData) {
+                    // Convert object to array and add id
+                    Object.keys(articlesData).forEach(id => {
+                        allArticles.push({
+                            id: id,
+                            article: articlesData[id]
+                        });
+                    });
+                }
+                
+                // Set filtered articles to all articles initially
+                filteredArticles = [...allArticles];
+                
+                // Render articles
+                renderArticles();
+                
+                // Update sidebar widgets
+                updateSidebarWidgets();
+                
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                noArticlesMessage.classList.remove('hidden');
+                noArticlesMessage.innerHTML = `
+                    <i class="fas fa-exclamation-triangle text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">Ошибка загрузки</h3>
+                    <p class="text-gray-500">Не удалось загрузить статьи. Пожалуйста, попробуйте позже.</p>
+                `;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        // Update sidebar widgets
+        function updateSidebarWidgets() {
+            // Update categories
+            const categories = {};
+            allArticles.forEach(({ article }) => {
+                const category = article.Tags || 'Без категории';
+                categories[category] = (categories[category] || 0) + 1;
+            });
+            
+            categoriesList.innerHTML = Object.keys(categories)
+                .map(category => createCategoryItem(category, categories[category]))
+                .join('');
+            
+            // Update popular posts (top 3 by publication date)
+            const popularPosts = [...allArticles]
+                .sort((a, b) => new Date(b.article.PublishedAt) - new Date(a.article.PublishedAt))
+                .slice(0, 3);
+            
+            popularPostsList.innerHTML = popularPosts
+                .map(({ article, id }) => createPopularPost(article, id))
+                .join('');
+            
+            // Update tags
+            const allTags = new Set();
+            allArticles.forEach(({ article }) => {
+                if (article.Tags) {
+                    allTags.add(article.Tags);
+                }
+            });
+            
+            tagsContainer.innerHTML = Array.from(allTags)
+                .map(tag => createTag(tag))
+                .join('');
+        }
+
+        // Event listeners
+        function initializeEventListeners() {
+            // Search functionality
+            searchButton.addEventListener('click', () => {
+                filterArticles(searchInput.value);
+            });
+            
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    filterArticles(searchInput.value);
+                }
+            });
+            
+            // Category filter
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('category-filter')) {
+                    e.preventDefault();
+                    const category = e.target.dataset.category;
+                    filterByCategory(category);
+                }
+            });
+            
+            // Tag filter
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('tag-filter')) {
+                    e.preventDefault();
+                    const tag = e.target.dataset.tag;
+                    searchInput.value = tag;
+                    filterArticles(tag);
+                }
+            });
+            
+            // Pagination
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('pagination-btn')) {
+                    e.preventDefault();
+                    currentPage = parseInt(e.target.dataset.page);
+                    renderArticles();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        }
+
+        // Initialize the blog
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEventListeners();
+            loadArticles();
+        });
+    </script>
+     <script src="cart.js"></script>
 </body>
 </html>

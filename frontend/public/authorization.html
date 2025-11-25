@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, follow">
+    <meta name="description" content="Авторизация в магазине настольных игр BoardGameHub. Вход в личный кабинет для оформления заказов и отслеживания покупок.">
+    <title>Авторизация | BoardGameHub | Интернет магазин настольных игр</title>
+    
+    <!-- Open Graph метатеги -->
+    <meta property="og:title" content="Авторизация | BoardGameHub">
+    <meta property="og:description" content="Вход в личный кабинет для оформления заказов и отслеживания покупок">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://boardgamehub.ru/login">
+    
+    <!-- Каноническая ссылка -->
+    <link rel="canonical" href="https://boardgamehub.ru/login">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Firebase Realtime Database SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <link rel="icon" type="image/x-icon" href="../../images/icon.png">
+    
+    <!-- Предзагрузка критического CSS -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.rel='stylesheet'">
+    
+    <style>
+        /* Критический CSS для ускорения загрузки */
+        .header-logo { opacity: 0; }
+        .loaded .header-logo { opacity: 1; transition: opacity 0.3s ease; }
+        
+        /* Анимации с учетом prefers-reduced-motion */
+        @media (prefers-reduced-motion: no-preference) {
+            .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+            .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        }
+        
+        /* Минимальные размеры для сенсорных элементов */
+        .touch-target { min-width: 44px; min-height: 44px; }
+        
+        /* Компактная шапка для мобильных устройств */
+        @media (max-width: 1024px) {
+            .compact-header { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        }
+        
+        /* Адаптивное меню */
+        @media (max-width: 768px) {
+            .compact-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .compact-nav li {
+                margin: 0 0.25rem;
+            }
+            
+            .compact-nav a {
+                font-size: 0.875rem;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .compact-nav a {
+                font-size: 0.8rem;
+                padding: 0.25rem;
+            }
+            
+            .header-icons {
+                margin-top: 0.5rem;
+            }
+        }
+        
+        /* Позиционирование счетчика корзины */
+        .cart-counter {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background-color: #f59e0b;
+            color: black;
+            font-size: 0.75rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Стили для формы авторизации */
+        .auth-container {
+            max-width: 28rem;
+            margin: 0 auto;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .divider-text {
+            padding: 0 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        /* Стили для уведомлений */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .alert-error {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+        }
+        
+        .alert-success {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+    <!-- Header с адаптивной навигацией -->
+    <header class="bg-white shadow-lg sticky top-0 z-50 compact-header">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="flex flex-col lg:flex-row justify-between items-center py-3 lg:py-4 gap-3 lg:gap-4">
+                <!-- Логотип -->
+                <div class="text-xl lg:text-2xl font-black flex items-center header-logo">
+                    <span class="text-yellow-500 mr-1">♟️</span> 
+                    <span>BoardGameHub</span>
+                </div>
+                
+                <!-- Адаптивное меню -->
+                <nav class="w-full lg:w-auto">
+                    <!-- Десктопное меню -->
+                    <ul class="flex flex-wrap justify-center compact-nav space-x-0 lg:space-x-6 xl:space-x-8">
+                        <li><a href="ProductCatalog.html" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Каталог товаров</a></li>
+                        <li><a href="Blog.html" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Блог</a></li>
+                        <li><a href="#" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">О нас</a></li>
+                        <li><a href="#" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Доставка</a></li>
+                        <li><a href="#" class="text-black font-medium relative pb-1 hover:text-yellow-500 transition-colors duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-yellow-500 after:transition-all after:duration-300 hover:after:w-full">Контакты</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Иконки пользователя и корзины -->
+                <div class="flex gap-3 lg:gap-4 header-icons">
+                    <a href="Bag.html" class="touch-target text-black text-lg lg:text-xl hover:text-yellow-500 transition-colors duration-300 relative flex items-center justify-center">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-counter">0</span>
+                    </a>
+                    <a href="PersonalAccount.html" class="touch-target text-yellow-500 text-lg lg:text-xl hover:text-yellow-500 transition-colors duration-300 flex items-center justify-center">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth section -->
+    <section class="container mx-auto px-4 sm:px-6 mb-12 lg:mb-16">
+        <div class="auth-container">
+            <div class="bg-white rounded-lg shadow-lg p-6 sm:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold mb-6 text-center">Вход в личный кабинет</h2>
+                
+                <!-- Контейнер для уведомлений -->
+                <div id="alertContainer"></div>
+                
+                <form id="loginForm" class="space-y-4 sm:space-y-6">
+                    <div>
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Ваш email" required>
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Ваш пароль" required>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" name="remember" class="h-4 w-4 text-yellow-500 focus:ring-yellow-500 border-gray-300 rounded">
+                            <label for="remember" class="ml-2 block text-sm text-gray-700">Запомнить меня</label>
+                        </div>
+                        
+                        <a href="#" id="forgotPassword" class="text-sm text-yellow-500 hover:text-yellow-600 transition-colors duration-300">Забыли пароль?</a>
+                    </div>
+                    
+                    <button type="submit" id="submitButton" class="w-full bg-yellow-500 text-black px-4 py-3 sm:px-6 sm:py-4 rounded font-semibold text-center transition-all duration-300 hover:bg-yellow-400 hover:-translate-y-1 touch-target text-sm sm:text-base flex items-center justify-center gap-2">
+                        <span id="buttonText">Войти</span>
+                        <span id="buttonSpinner" class="loading-spinner hidden"></span>
+                    </button>
+                </form>
+                
+                <div class="divider">
+                    <span class="divider-text">или</span>
+                </div>
+                
+                <div class="space-y-3">
+                    <button type="button" class="w-full bg-blue-600 text-white px-4 py-3 rounded font-semibold text-center transition-all duration-300 hover:bg-blue-700 flex items-center justify-center gap-2 touch-target">
+                        <i class="fab fa-vk"></i>
+                        Войти через ВКонтакте
+                    </button>
+                    
+                    <button type="button" class="w-full bg-gray-800 text-white px-4 py-3 rounded font-semibold text-center transition-all duration-300 hover:bg-gray-900 flex items-center justify-center gap-2 touch-target">
+                        <i class="fab fa-google"></i>
+                        Войти через Google
+                    </button>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600 text-sm sm:text-base">
+                        Еще нет аккаунта? 
+                        <a href="register.html" class="text-yellow-500 hover:text-yellow-600 font-medium transition-colors duration-300">Зарегистрироваться</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер с адаптивной сеткой -->
+    <footer class="bg-black text-white pt-10 lg:pt-14 xl:pt-16 pb-6 lg:pb-8">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 xl:gap-10 mb-8 lg:mb-10">
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">BoardGameHub</h3>
+                    <p class="text-gray-300 mb-4 sm:mb-5 leading-relaxed text-sm sm:text-base">Лучший выбор настольных игр для всей семьи с доставкой по всей России. Присоединяйтесь к нашему сообществу!</p>
+                    <div class="flex gap-3 sm:gap-4 mt-4 sm:mt-5">
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="ВКонтакте"><i class="fab fa-vk text-sm sm:text-base"></i></a>
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="Телеграм"><i class="fab fa-telegram text-sm sm:text-base"></i></a>
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="YouTube"><i class="fab fa-youtube text-sm sm:text-base"></i></a>
+                        <a href="#" class="touch-target w-8 h-8 sm:w-10 sm:h-10 bg-gray-800 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-yellow-500 hover:text-black" aria-label="Instagram"><i class="fab fa-instagram text-sm sm:text-base"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">Каталог</h3>
+                    <ul>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Семейные игры</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Стратегии</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Детские игры</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Кооперативные игры</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Для вечеринок</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">Информация</h3>
+                    <ul>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">О нас</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Доставка и оплата</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Контакты</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="Blog.html" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Блог</a></li>
+                        <li class="mb-2 sm:mb-3"><a href="#" class="text-gray-300 hover:text-yellow-500 transition-colors duration-300 text-sm sm:text-base">Акции</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 text-yellow-500">Контакты</h3>
+                    <ul class="space-y-3 sm:space-y-4">
+                        <li class="flex items-center gap-3 sm:gap-4 text-gray-300 text-sm sm:text-base"><i class="fas fa-map-marker-alt"></i> Москва, ул. Игровая, 15</li>
+                        <li class="flex items-center gap-3 sm:gap-4 text-gray-300 text-sm sm:text-base"><i class="fas fa-phone"></i> +7 (495) 123-45-67</li>
+                        <li class="flex items-center gap-3 sm:gap-4 text-gray-300 text-sm sm:text-base"><i class="fas fa-envelope"></i> info@boardgamehub.ru</li>
+                    </ul>
+                    <h3 class="text-base sm:text-lg font-semibold mb-4 sm:mb-6 mt-6 sm:mt-8 text-yellow-500">Рассылка</h3>
+                    <div class="flex gap-2 sm:gap-3">
+                        <input type="email" placeholder="Ваш email" class="flex-1 px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 rounded border-none text-white placeholder-gray-400 text-sm sm:text-base" aria-label="Email для подписки на рассылку">
+                        <button class="bg-yellow-500 text-black px-4 py-2 sm:px-6 sm:py-3 rounded font-semibold transition-colors duration-300 hover:bg-yellow-400 touch-target text-sm sm:text-base">OK</button>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-6 sm:pt-8 border-t border-gray-800 text-center text-gray-400 text-xs sm:text-sm">
+                <p>&copy; 2023 BoardGameHub. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты с defer -->
+    <script defer>
+        // Конфигурация Firebase Realtime Database
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuYb4O0s7accu6T5MSbJ6WUiSpwnJI6gk",
+            authDomain: "gamestore-8a2a3.firebaseapp.com",
+            databaseURL: "https://gamestore-8a2a3-default-rtdb.firebaseio.com",
+            projectId: "gamestore-8a2a3",
+            storageBucket: "gamestore-8a2a3.firebasestorage.app",
+            messagingSenderId: "630285121213",
+            appId: "1:630285121213:web:6cc7f2cc0350e0f020e9d4",
+            measurementId: "G-3EXSGX4EWJ"
+        };
+
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // DOM элементы
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const submitButton = document.getElementById('submitButton');
+        const buttonText = document.getElementById('buttonText');
+        const buttonSpinner = document.getElementById('buttonSpinner');
+        const alertContainer = document.getElementById('alertContainer');
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+
+        // Функция показа уведомлений
+        function showAlert(message, type = 'error') {
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+            
+            // Автоматическое скрытие успешных уведомлений
+            if (type === 'success') {
+                setTimeout(() => {
+                    alertContainer.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        // Функция показа/скрытия загрузки
+        function setLoading(isLoading) {
+            if (isLoading) {
+                submitButton.classList.add('loading');
+                buttonText.textContent = 'Вход...';
+                buttonSpinner.classList.remove('hidden');
+            } else {
+                submitButton.classList.remove('loading');
+                buttonText.textContent = 'Войти';
+                buttonSpinner.classList.add('hidden');
+            }
+        }
+
+        // Функция хеширования пароля (базовая реализация)
+        function hashPassword(password) {
+            // В реальном приложении используйте более безопасные методы хеширования
+            let hash = 0;
+            for (let i = 0; i < password.length; i++) {
+                const char = password.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash.toString();
+        }
+
+        // Функция поиска пользователя в базе данных
+        async function findUserByEmail(email) {
+            try {
+                const snapshot = await database.ref('Users').orderByChild('Email').equalTo(email).once('value');
+                return snapshot.val();
+            } catch (error) {
+                console.error('Ошибка поиска пользователя:', error);
+                throw error;
+            }
+        }
+
+        // Функция проверки пароля
+        function verifyPassword(inputPassword, storedPassword) {
+            // В реальном приложении используйте безопасное сравнение хешей
+            return hashPassword(inputPassword) === storedPassword;
+        }
+
+        // Функция создания сессии пользователя
+        function createUserSession(userData, userId, remember) {
+            const sessionData = {
+                userId: userId,
+                email: userData.Email,
+                firstName: userData.FirstName,
+                lastName: userData.LastName,
+                avatar: userData.Avatar,
+                phone: userData.Phone,
+                loginTime: new Date().toISOString()
+            };
+            
+            if (remember) {
+                // Сохраняем на 30 дней
+                localStorage.setItem('userSession', JSON.stringify(sessionData));
+                localStorage.setItem('sessionExpiry', new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString());
+            } else {
+                // Сохраняем только на время сессии
+                sessionStorage.setItem('userSession', JSON.stringify(sessionData));
+            }
+            
+            return sessionData;
+        }
+
+        // Функция проверки активной сессии
+        function checkActiveSession() {
+            // Проверяем localStorage (долгосрочная сессия)
+            const sessionData = localStorage.getItem('userSession');
+            const expiry = localStorage.getItem('sessionExpiry');
+            
+            if (sessionData && expiry) {
+                const now = new Date();
+                const expiryDate = new Date(expiry);
+                
+                if (now < expiryDate) {
+                    // Сессия действительна
+                    return JSON.parse(sessionData);
+                } else {
+                    // Сессия истекла
+                    localStorage.removeItem('userSession');
+                    localStorage.removeItem('sessionExpiry');
+                }
+            }
+            
+            // Проверяем sessionStorage (краткосрочная сессия)
+            const tempSession = sessionStorage.getItem('userSession');
+            if (tempSession) {
+                return JSON.parse(tempSession);
+            }
+            
+            return null;
+        }
+
+        // Обработка формы авторизации
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const remember = document.getElementById('remember').checked;
+            
+            // Базовая валидация
+            if (!email || !password) {
+                showAlert('Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                showAlert('Пожалуйста, введите корректный email');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showAlert('Пароль должен содержать минимум 6 символов');
+                return;
+            }
+            
+            setLoading(true);
+            
+            try {
+                // Ищем пользователя по email
+                const users = await findUserByEmail(email);
+                
+                if (!users) {
+                    showAlert('Пользователь с таким email не найден');
+                    setLoading(false);
+                    return;
+                }
+                
+                // Получаем данные пользователя (первый найденный пользователь)
+                const userId = Object.keys(users)[0];
+                const userData = users[userId];
+                
+                // Проверяем пароль
+                if (!verifyPassword(password, userData.Password)) {
+                    showAlert('Неверный пароль');
+                    setLoading(false);
+                    return;
+                }
+                
+                // Создаем сессию
+                const sessionData = createUserSession(userData, userId, remember);
+                
+                showAlert(`Добро пожаловать, ${userData.FirstName}! Перенаправление...`, 'success');
+                
+                // Логируем успешный вход (для аналитики)
+                await database.ref('LoginLogs').push({
+                    userId: userId,
+                    email: email,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP,
+                    userAgent: navigator.userAgent
+                });
+                
+                // Перенаправление в личный кабинет
+                setTimeout(() => {
+                    window.location.href = 'PersonalAccount.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Ошибка авторизации:', error);
+                showAlert('Произошла ошибка при авторизации. Попробуйте позже.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        // Восстановление пароля (базовая реализация)
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showAlert('Пожалуйста, введите ваш email для восстановления пароля');
+                return;
+            }
+            
+            if (!email.includes('@')) {
+                showAlert('Пожалуйста, введите корректный email');
+                return;
+            }
+            
+            showAlert('Функция восстановления пароля временно недоступна. Обратитесь в поддержку.', 'error');
+        });
+
+        // Проверка активной сессии при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.classList.add('loaded');
+            
+            const activeSession = checkActiveSession();
+            if (activeSession) {
+                // Пользователь уже авторизован - перенаправляем в личный кабинет
+                console.log('Пользователь уже авторизован:', activeSession.email);
+                window.location.href = 'PersonalAccount.html';
+                return;
+            }
+            
+            // Автозаполнение тестовых данных для демонстрации
+            // В реальном приложении удалите эту часть
+            if (window.location.href.includes('localhost') || window.location.href.includes('127.0.0.1')) {
+                emailInput.value = 'user@example.com';
+                passwordInput.value = '12345a';
+                
+                // Создаем тестового пользователя в базе данных
+                createTestUser();
+            }
+        });
+
+        // Функция создания тестового пользователя (для демонстрации)
+        async function createTestUser() {
+            try {
+                const testUser = {
+                    Addresses: {},
+                    Avatar: "avatar.jpg",
+                    BirthDate: "1990-05-15",
+                    CreatedAt: "2023-01-15T10:30:00Z",
+                    Email: "user1@example.com",
+                    FirstName: "Иван",
+                    LastName: "Петров",
+                    Password: hashPassword("12345a"), // Хешируем пароль
+                    Phone: "79161234567"
+                };
+                
+                // Проверяем, существует ли уже тестовый пользователь
+                const existingUser = await findUserByEmail('user@example.com');
+                if (!existingUser) {
+                    // Создаем нового пользователя
+                    const newUserRef = database.ref('Users').push();
+                    await newUserRef.set(testUser);
+                    console.log('Тестовый пользователь создан');
+                }
+            } catch (error) {
+                console.error('Ошибка создания тестового пользователя:', error);
+            }
+        }
+
+        // Функция выхода из системы (для использования в других страницах)
+        window.logoutUser = function() {
+            localStorage.removeItem('userSession');
+            localStorage.removeItem('sessionExpiry');
+            sessionStorage.removeItem('userSession');
+            window.location.href = 'login.html';
+        };
+
+        // Функция получения данных текущего пользователя (для использования в других страницах)
+        window.getCurrentUser = function() {
+            return checkActiveSession();
+        };
+    </script>
+</body>
+</html>

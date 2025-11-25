@@ -95,7 +95,7 @@ class Cart {
 
     // Обновление счетчика в хедере
     updateCartCount() {
-        const cartCountElements = document.querySelectorAll('.cart-count');
+        const cartCountElements = document.querySelectorAll('.cart-counter');
         const totalItems = this.getTotalItems();
         
         cartCountElements.forEach(element => {
