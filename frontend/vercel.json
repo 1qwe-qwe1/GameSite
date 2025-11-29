@@ -2,7 +2,7 @@
   "version": 2,
   "routes": [
     {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg))",
       "dest": "/frontend/public/$1"
     },
     {
@@ -11,7 +11,7 @@
     },
     {
       "src": "/Bag.html",
-      "dest": "/frontend/public/Bag.html"
+      "dest": "/frontend/public/Bag.html" 
     },
     {
       "src": "/Blog.html",
@@ -23,11 +23,6 @@
     },
     {
       "src": "/",
-      "dest": "/frontend/public/main.html"
-    },
-    {
-      "src": "/(.*)",
-      "status": 404,
       "dest": "/frontend/public/main.html"
     }
   ]
