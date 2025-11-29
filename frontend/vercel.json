@@ -1,25 +1,34 @@
 {
   "version": 2,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/Bag.html",
-      "destination": "/frontend/public/Bag.html"
+      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
+      "dest": "/frontend/public/$1"
     },
     {
-      "source": "/Blog.html",
-      "destination": "/frontend/public/Blog.html"
+      "src": "/ProductCatalog.html",
+      "dest": "/frontend/public/ProductCatalog.html"
     },
     {
-      "source": "/PersonalAccount.html", 
-      "destination": "/frontend/public/PersonalAccount.html"
+      "src": "/Bag.html",
+      "dest": "/frontend/public/Bag.html"
     },
     {
-      "source": "/ProductCatalog.html",
-      "destination": "/frontend/public/ProductCatalog.html"
+      "src": "/Blog.html",
+      "dest": "/frontend/public/Blog.html"
     },
     {
-      "source": "/(.*)",
-      "destination": "/frontend/public/main.html"
+      "src": "/PersonalAccount.html",
+      "dest": "/frontend/public/PersonalAccount.html"
+    },
+    {
+      "src": "/",
+      "dest": "/frontend/public/main.html"
+    },
+    {
+      "src": "/(.*)",
+      "status": 404,
+      "dest": "/frontend/public/main.html"
     }
   ]
 }
