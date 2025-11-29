@@ -1,16 +1,25 @@
 {
   "version": 2,
-  "name": "frontend",
-  "builds": [
+  "rewrites": [
     {
-      "src": "public/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
+      "source": "/Bag.html",
+      "destination": "/frontend/public/Bag.html"
+    },
     {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "source": "/Blog.html",
+      "destination": "/frontend/public/Blog.html"
+    },
+    {
+      "source": "/PersonalAccount.html", 
+      "destination": "/frontend/public/PersonalAccount.html"
+    },
+    {
+      "source": "/ProductCatalog.html",
+      "destination": "/frontend/public/ProductCatalog.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/public/main.html"
     }
   ]
 }
