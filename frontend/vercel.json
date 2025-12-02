@@ -23,7 +23,7 @@
     },
     {
       "src": "/",
-      "dest": "/frontend/public/main.html"
+      "dest": "/frontend/public/index.html"
     }
   ]
 }
